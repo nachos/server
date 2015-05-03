@@ -17,5 +17,5 @@ module.exports = {
   },
 
   // Should SSL be used
-  requireSSL: true
+  requireSSL: false
 };
