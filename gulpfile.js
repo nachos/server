@@ -36,7 +36,7 @@ function getServerConfig() {
 
 /** Gulp tasks */
 
-gulp.task('default', ['jshint:all', 'test']);
+gulp.task('default', ['test']);
 
 gulp.task('generate-certs', function (cb) {
   pem.createCertificate({days: 3650, selfSigned: true}, function (err, keys) {
@@ -106,7 +106,9 @@ gulp.task('mocha', ['env:test', 'env:local'], function (cb) {
     });
 });
 
-gulp.task('test', ['mocha']);
+gulp.task('test', ['jshint:all', 'mocha'], function(){
+  process.exit(0);
+});
 
 gulp.task('jshint:all', ['jshint', 'jshint:test', 'jshint:gulpfile']);
 
