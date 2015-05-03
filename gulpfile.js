@@ -106,8 +106,13 @@ gulp.task('mocha', ['env:test', 'env:local'], function (cb) {
     });
 });
 
-gulp.task('test', ['jshint:all', 'mocha'], function(){
-  process.exit(0);
+gulp.task('test', ['jshint:all'], function () {
+  runSequence(
+    'jshint:all',
+    'mocha',
+    function () {
+      process.exit(0);
+    });
 });
 
 gulp.task('jshint:all', ['jshint', 'jshint:test', 'jshint:gulpfile']);
@@ -119,7 +124,7 @@ gulp.task('jshint', function () {
 
 gulp.task('jshint:test', function () {
   return gulp.src('server/**/*.spec.js')
-    .pipe(jshintPipe('server/.jshintrc-spec'));
+    .pipe(jshintPipe('server/.spec.jshintrc'));
 });
 
 gulp.task('jshint:gulpfile', function () {
