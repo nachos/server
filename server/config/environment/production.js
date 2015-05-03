@@ -13,7 +13,7 @@ module.exports = {
 
   // MongoDB connection options
   mongo: {
-    uri: 'mongodb://localhost/nachos'
+    uri:  process.env.MONGO_URI || 'mongodb://localhost/nachos'
   },
 
   // Should SSL be used
