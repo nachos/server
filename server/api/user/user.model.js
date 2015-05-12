@@ -23,6 +23,7 @@ var UserSchema = new Schema({
     lowercase: true
   },
   gender: {type: String, lowercase: true},
+  picture: String,
   roles: [
     {type: Schema.Types.ObjectId, ref: 'Role'}
   ],
