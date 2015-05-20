@@ -7,7 +7,7 @@ module.exports = function () {
   Package.find({}).remove(function () {
     Package.create({
       name: 'movie-list',
-      repo: 'nachos/movie-list',
+      repo: 'git://github.com/nachos/movie-list.git',
       type: 'dip'
     }, function (err) {
       if (err) {
