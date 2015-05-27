@@ -24,7 +24,7 @@ exports.index = function (req, res) {
 
 // Get a single package
 exports.show = function (req, res) {
-  Package.findByIdQ(req.params.id)
+  Package.findOneQ({name: req.params.name})
     .then(function (pkg) {
       if (!pkg) {
         res.status(404).end();
@@ -63,7 +63,7 @@ exports.create = function (req, res) {
 exports.update = function (req, res) {
   var data = _.pick(req.body, ['name', 'repo']);
 
-  Package.findByIdQ(req.params.id)
+  Package.findOneQ({name: req.params.name})
     .then(function (pkg) {
       if (!pkg) {
         res.status(404).end();
@@ -85,7 +85,7 @@ exports.update = function (req, res) {
 
 // Deletes a package from the DB.
 exports.destroy = function (req, res) {
-  Package.findOneAndRemoveQ({_id: req.params.id})
+  Package.findOneAndRemoveQ({name: req.params.name})
     .then(function (pkg) {
       if (!pkg) {
         res.status(404).end();

@@ -6,10 +6,10 @@ var auth = require('../../auth/auth.service');
 
 var router = express.Router();
 
-router.get('/', auth.hasPermissions('read_packages'), controller.index);
-router.get('/:id', auth.hasPermissions('read_packages'), controller.show);
+router.get('/', controller.index);
+router.get('/:name', controller.show);
 router.post('/', auth.hasPermissions('write_packages'), controller.create);
-router.put('/:id', auth.hasPermissions('write_packages'), controller.update);
-router.delete('/:id', auth.hasPermissions('write_packages'), controller.destroy);
+router.put('/:name', auth.hasPermissions('write_packages'), controller.update);
+router.delete('/:name', auth.hasPermissions('write_packages'), controller.destroy);
 
 module.exports = router;

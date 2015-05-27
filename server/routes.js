@@ -11,9 +11,10 @@ module.exports = function(app) {
   // Insert routes below
   app.use('/api/roles', require('./api/role'));
   app.use('/api/users', require('./api/user'));
+  app.use('/api/packages', require('./api/package'));
 
   app.use('/auth', require('./auth'));
-  
+
   // All undefined api routes should return a 404
   app.route('/:url(api|auth)/*')
    .get(errors[404]);
