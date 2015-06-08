@@ -43,6 +43,7 @@ exports.show = function (req, res) {
 // Creates a new package in the DB.
 exports.create = function (req, res) {
   var newPackage = new Package(req.body);
+
   newPackage.saveQ()
     .then(function (pkg) {
       if (!pkg) {
