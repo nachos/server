@@ -8,12 +8,12 @@ module.exports = function () {
     Package.create(
       {
         name: 'movie-list',
-        repo: 'git://github.com/nachos/dip-movie-list.git',
+        repo: 'git://github.com/nachos/movie-list-dip.git',
         type: 'dip'
       },
       {
         name: 'translation',
-        repo: 'git://github.com/nachos/dip-translation.git',
+        repo: 'git://github.com/nachos/translation-dip.git',
         type: 'dip'
       },
       function (err) {
