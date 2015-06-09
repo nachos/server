@@ -30,7 +30,7 @@ RoleSchema
   .path('name')
   .validate(function (name) {
     return name && name.length;
-  }, 'שם התפקיד אינו יכול להיות ריק.');
+  }, 'role name cannot be empty.');
 
 // Validate name is not taken
 RoleSchema
@@ -45,7 +45,7 @@ RoleSchema
       }
       respond(true);
     });
-  }, 'שם תפקיד זה נמצא כבר בשימוש');
+  }, 'role name already used.');
 
 // Validate permissions
 RoleSchema

@@ -6,7 +6,7 @@ module.exports = function () {
   var deferred = Q.defer();
   Role.find({}).remove(function () {
     Role.create({
-      name: "אדמין",
+      name: "admin",
       permissions: [
         'read_users',
         'write_users',
@@ -14,11 +14,9 @@ module.exports = function () {
         'write_roles'
       ]
     },{
-      name: "מנהל",
+      name: "developer",
       permissions: [
-        'read_users',
-        'read_roles',
-        'write_roles'
+        'write_packages'
       ]
     }, function (err) {
       if (err) {

@@ -1,6 +1,5 @@
 'use strict';
 
-var mongoose = require('mongoose');
 var _ = require('lodash');
 var config = require('../config/environment');
 var jwt = require('jsonwebtoken');
@@ -64,7 +63,7 @@ function hasPermissions() {
   return compose()
     .use(isAuthenticated())
     .use(function meetsRequirements(req, res, next) {
-      var permissions = _.flatten(req.user.roles, 'permissions');
+      var permissions = _.flatten(_.pluck(req.user.roles, 'permissions'));
 
       if (_.isEmpty(_.difference(wantedPermissions, permissions))) {
         next();
