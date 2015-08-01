@@ -8,11 +8,8 @@ var controller = require('./controller');
 var router = express.Router();
 
 router
-  .get('/signin', passport.authenticate('facebook', { callbackURL: '/auth/facebook/signin/callback' }))
-  .get('/signin/callback', controller.signin)
-
-  .get('/signup', passport.authenticate('facebook', { callbackURL: '/auth/facebook/signup/callback' }))
-  .get('/signup/callback', controller.signup)
+  .get('/signin', passport.authenticate('facebook', { callbackURL: '/auth/facebook/signin/callback', session: false }))
+  .get('/signin/callback', passport.authenticate('facebook', { successURL: '/', callbackURL: '/auth/facebook/signin/callback', session: false }), controller.signin)
 
   .get('/connect', auth.fillAuthorizationHeaderFromCookie(), auth.isAuthenticated() ,passport.authenticate('facebook', { callbackURL: '/auth/facebook/connect/callback' }))
   .get('/connect/callback', auth.fillAuthorizationHeaderFromCookie(), auth.isAuthenticated(), controller.connect)

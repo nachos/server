@@ -85,7 +85,8 @@ function signToken(id) {
  * Set token cookie directly for oAuth strategies
  */
 function setTokenCookie(req, res) {
-  if (!req.user) return res.status(404).json({message: 'משהו השתבש, אנא נסה שנית'});
+  if (!req.user) return res.status(404).json({message: 'something went wrong, try again'});
+
   var token = signToken(req.user._id.toString());
   res.cookie('token', JSON.stringify(token));
   res.redirect('/');

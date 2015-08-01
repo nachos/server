@@ -6,71 +6,8 @@ var auth = require('../auth.service');
 var jwt = require('jsonwebtoken');
 var config = require('../../config/environment');
 
-exports.signin = function (req, res, next) {
-  passport.authenticate('google', { callbackURL: '/auth/google/signin/callback' }, function (err, user, info) {
-    if (err || !info) {
-      // TODO: what?
-      return res.redirect('/login');
-    }
-
-    User.findOne({ 'providers.google.id': info.id }, function (err, user) {
-      if (err) {
-        // TODO: what?
-        return next(err);
-      }
-
-      if (!user) {
-        return res.redirect('/login');
-      }
-      else {
-        // login
-
-        req.user = user;
-        auth.setTokenCookie(req, res);
-      }
-    });
-  })(req, res, next);
-};
-
-exports.signup = function (req, res, next) {
-  passport.authenticate('google', { callbackURL: '/auth/google/signup/callback' }, function (err, user, info) {
-    if (err || !info) {
-      // TODO: what?
-      return res.redirect('/signup');
-    }
-
-    User.findOne({ 'providers.google.id': info.id }, function (err, user) {
-      if (err) {
-        // TODO: what?
-        return next(err);
-      }
-
-      if (!user) {
-        var googleToken = jwt.sign({ id: info.id, link: info.link }, config.secrets.session, { expiresInMinutes: 300 });
-
-        var userInfo = {
-          name: {
-            first: info.given_name,
-            last: info.family_name
-          },
-          email: info.email,
-          gender: info.gender
-        };
-
-        var formattedUserData = new Buffer(JSON.stringify({
-          provider: 'google',
-          token: googleToken,
-          info: userInfo
-        })).toString("base64");
-
-        return res.redirect('/signup/' + formattedUserData);
-      }
-      else {
-        req.user = user;
-        auth.setTokenCookie(req, res);
-      }
-    });
-  })(req, res, next);
+exports.signin = function (req, res) {
+  auth.setTokenCookie(req, res);
 };
 
 exports.connect = function (req, res, next) {

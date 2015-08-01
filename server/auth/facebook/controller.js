@@ -6,71 +6,8 @@ var auth = require('../auth.service');
 var jwt = require('jsonwebtoken');
 var config = require('../../config/environment');
 
-exports.signin = function (req, res, next) {
-  passport.authenticate('facebook', { callbackURL: '/auth/facebook/signin/callback' }, function (err, user, info) {
-    if (err || !info) {
-      // TODO: what?
-      return res.redirect('/login');
-    }
-
-    User.findOne({ 'providers.facebook.id': info.id }, function (err, user) {
-      if (err) {
-        // TODO: what?
-        return next(err);
-      }
-
-      if (!user) {
-        return res.redirect('/login');
-      }
-      else {
-        // login
-
-        req.user = user;
-        auth.setTokenCookie(req, res);
-      }
-    });
-  })(req, res, next);
-};
-
-exports.signup = function (req, res, next) {
-  passport.authenticate('facebook', { callbackURL: '/auth/facebook/signup/callback' }, function (err, user, info) {
-    if (err || !info) {
-      // TODO: what?
-      return res.redirect('/signup');
-    }
-
-    User.findOne({ 'providers.facebook.id': info.id }, function (err, user) {
-      if (err) {
-        // TODO: what?
-        return next(err);
-      }
-
-      if (!user) {
-        var facebookToken = jwt.sign({ id: info.id, link: info.link }, config.secrets.session, { expiresInMinutes: 300 });
-
-        var userInfo = {
-          name: {
-            first: info.first_name,
-            last: info.last_name
-          },
-          email: info.email,
-          gender: info.gender
-        };
-
-        var formattedUserData = new Buffer(JSON.stringify({
-          provider: 'facebook',
-          token: facebookToken,
-          info: userInfo
-        })).toString("base64");
-
-        return res.redirect('/signup/' + formattedUserData);
-      }
-      else {
-        req.user = user;
-        auth.setTokenCookie(req, res);
-      }
-    });
-  })(req, res, next);
+exports.signin = function (req, res) {
+  auth.setTokenCookie(req, res);
 };
 
 exports.connect = function (req, res, next) {

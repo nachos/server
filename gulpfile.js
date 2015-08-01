@@ -136,6 +136,10 @@ gulp.task('nodemon', function (cb) {
   nodemon({
     script: 'server/app.js',
 
+    options: {
+      nodeArgs: ['--debug']
+    },
+
     // watch core server file(s) that require server restart on change
     watch: ['server/**/*.{js,json}']
   })

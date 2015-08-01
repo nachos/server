@@ -9,21 +9,16 @@ exports.setup = function () {
       passwordField: 'password' // this is the virtual field on the model
     },
     function (email, password, done) {
-      User.findOneQ({
-        email: email.toLowerCase()
-      }, 'salt hashedPassword')
+      User.findOneQ({email: email.toLowerCase()}, 'salt hashedPassword')
         .then(function (user) {
-          if (!user) {
-            return done(null, false, {message: 'האימייל לא נמצא במערכת.'});
+          if (!user || !user.authenticate(password)) {
+            return done(null, false, {message: 'Invalid email or password'});
           }
-          if (!user.authenticate(password)) {
-            return done(null, false, {message: 'הסיסמא שהזנת אינה תקינה.'});
-          }
+
           return done(null, user);
         })
         .catch(function (err) {
           logger.error({err: err});
-
           done(err);
         });
     }

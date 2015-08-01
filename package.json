@@ -18,7 +18,7 @@
   "homepage": "https://github.com/nachos/server",
   "private": true,
   "devDependencies": {
-    "chai": "^2.3.0",
+    "chai": "^3.2.0",
     "event-stream": "^3.3.0",
     "gulp": "^3.8.11",
     "gulp-bump": "^0.3.0",
@@ -28,12 +28,12 @@
     "gulp-mocha": "^2.0.1",
     "gulp-nodemon": "^2.0.3",
     "gulp-util": "^3.0.4",
-    "jshint-stylish": "^1.0.2",
-    "lazypipe": "^0.2.3",
+    "jshint-stylish": "^2.0.1",
+    "lazypipe": "^1.0.1",
     "open": "0.0.5",
     "pem": "^1.7.2",
     "run-sequence": "^1.1.0",
-    "supertest": "^0.15.0"
+    "supertest": "^1.0.1"
   },
   "dependencies": {
     "body-parser": "^1.12.3",
