@@ -14,8 +14,8 @@ module.exports = function () {
     .then(function (roles) {
       return populateUsers(roles);
     })
-    .then(function () {
-      return populatePackages();
+    .then(function (users) {
+      return populatePackages(users);
     })
     .then(function () {
       console.log('Finished populating database.');

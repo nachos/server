@@ -15,7 +15,7 @@ var all = {
   port: process.env.PORT || 1337,
 
   // Should we populate the DB with sample data?
-  seedDB: false,
+  seedDB: process.env.SEED_DB,
 
   // Secret for session, you will want to change this and make it an environment variable
   secrets: {

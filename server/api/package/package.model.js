@@ -1,6 +1,5 @@
 'use strict';
 
-var _ = require('lodash');
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
@@ -11,8 +10,21 @@ var types = [
 
 var PackageSchema = new Schema({
   name: {type: String, required: true, lowercase: true},
-  repo: {type: String, required: true, lowercase: true},
-  type: {type: String, required: true, lowercase: true}
+  version: {type: String, required: true, lowercase: true},
+  time: {
+    created: {type: Date, required: true},
+    modified: {type: Date, required: true}
+  },
+  description: {type: String},
+  keywords: [{type: String, lowercase: true}],
+  homepage: {type: String},
+  owners: [{type: Schema.Types.ObjectId, ref: 'User'}],
+  repository: {type: String},
+  dist: {
+    tarball: {type: String, required: true},
+    shasum: {type: String, required: true, lowercase: true}
+  },
+  type: {type: String, required: true, enum: types}
 });
 
 /**
@@ -44,12 +56,5 @@ PackageSchema
       respond(true);
     });
   }, 'name already taken.');
-
-// Validate type
-PackageSchema
-  .path('type')
-  .validate(function (val) {
-    return _.contains(types, val);
-  }, 'invalid type.');
 
 module.exports = mongoose.model('Package', PackageSchema);
