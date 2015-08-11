@@ -1,3 +1,5 @@
+'use strict';
+
 var passport = require('passport');
 var FacebookStrategy = require('passport-facebook').Strategy;
 var User = require('../../api/user/user.model');
@@ -36,6 +38,8 @@ exports.setup = function (config) {
                 return done(null, false, { message: 'email already in use'});
               }
 
+              // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
+
               var newUser = new User({
                 name: {
                   first: info.first_name,
@@ -49,6 +53,8 @@ exports.setup = function (config) {
                   }
                 }
               });
+
+              // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
 
               return newUser.saveQ()
                 .then(function (user) {
@@ -64,5 +70,6 @@ exports.setup = function (config) {
           done(err);
         });
     }
+
   ));
 };

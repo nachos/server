@@ -16,10 +16,7 @@ var clearModels = function () {
 };
 
 var createModels = function () {
-  return Role.createQ({
-    name: "admin",
-    permissions: []
-  })
+  return Role.createQ({name: 'admin', permissions: []})
     .then(function (newRole) {
       return User.create({
         name: {
@@ -34,7 +31,7 @@ var createModels = function () {
         password: 'hammertime'
       })
         .then(function (newUser) {
-          return Q.all([Q(newRole), Q(newUser)]);
+          return Q.all([Q.resolve(newRole), Q.resolve(newUser)]);
         });
     });
 };
@@ -115,7 +112,10 @@ xdescribe('/api/roles', function () {
               .expect(200)
               .expect('Content-Type', /json/)
               .end(function (err, res) {
-                if (err) return done(err);
+                if (err) {
+                  return done(err);
+                }
+
                 expect(res.body).to.be.an('array');
                 expect(res.body.length).to.equal(1);
                 done();
@@ -182,6 +182,7 @@ xdescribe('/api/roles', function () {
                   if (err) {
                     return done(err);
                   }
+
                   expect(res.body).to.be.an('object');
                   expect(res.body).to.be.empty;
                   done();
@@ -200,7 +201,10 @@ xdescribe('/api/roles', function () {
                 .expect(200)
                 .expect('Content-Type', /json/)
                 .end(function (err, res) {
-                  if (err) return done(err);
+                  if (err) {
+                    return done(err);
+                  }
+
                   expect(res.body).to.be.an('object');
                   expect(res._id).to.equal(role._id.toString());
                   expect(res.body.name).to.equal(role.name);
@@ -332,7 +336,10 @@ xdescribe('/api/roles', function () {
         .expect(200)
         .expect('Content-Type', /json/)
         .end(function (err, res) {
-          if (err) return done(err);
+          if (err) {
+            return done(err);
+          }
+
           expect(res.body).to.be.instanceof(Array);
           done();
         });
@@ -345,7 +352,10 @@ xdescribe('/api/roles', function () {
         .expect(200)
         .expect('Content-Type', /json/)
         .end(function (err, res) {
-          if (err) return done(err);
+          if (err) {
+            return done(err);
+          }
+
           expect(res.body).to.be.instanceof(Array);
           done();
         });

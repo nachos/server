@@ -1,8 +1,5 @@
-/**
- * Logger
- */
-
 'use strict';
+
 var bunyan = require('bunyan');
 
 function createLogger() {

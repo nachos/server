@@ -1,9 +1,12 @@
+'use strict';
+
 var Q = require('q');
 var _ = require('lodash');
 var User = require('../../api/user/user.model');
 
 module.exports = function (roles) {
   var deferred = Q.defer();
+
   User.find({}).remove(function () {
     User.create({
       name: {
@@ -31,7 +34,8 @@ module.exports = function (roles) {
     }, function (err) {
       if (err) {
         deferred.reject(err);
-      } else {
+      }
+      else {
         deferred.resolve(_.toArray(arguments).slice(1));
       }
     });

@@ -1,10 +1,5 @@
-/**
- * Express configuration
- */
-
 'use strict';
 
-var express = require('express');
 var morgan = require('morgan');
 var compression = require('compression');
 var bodyParser = require('body-parser');
@@ -15,11 +10,9 @@ var path = require('path');
 var config = require('./environment');
 var passport = require('passport');
 var httpAuth = require('http-auth');
-var _ = require('lodash');
 var ejs = require('ejs');
 
-
-module.exports = function(app) {
+module.exports = function (app) {
   var env = app.get('env');
 
   app.set('views', path.join(config.root, 'server', 'views'));
@@ -32,7 +25,7 @@ module.exports = function(app) {
   app.use(cookieParser());
   app.use(passport.initialize());
 
-  if(config.basicAuth && config.basicAuth.enabled) {
+  if (config.basicAuth && config.basicAuth.enabled) {
     app.use(httpAuth.connect(httpAuth.basic({
       realm: config.basicAuth.realm,
       skipUser: true
@@ -41,11 +34,11 @@ module.exports = function(app) {
     })));
   }
 
-  if ('test' !== env) {
-      app.use(morgan('dev'));
+  if (env !== 'test') {
+    app.use(morgan('dev'));
   }
 
-  if ('development' === env || 'test' === env) {
+  if (env === 'development' || env === 'test') {
     app.use(errorHandler()); // Error handler - has to be last
   }
 };

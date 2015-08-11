@@ -54,7 +54,7 @@ var UserSchema = new Schema({
 UserSchema
   .path('email')
   .set(function (email) {
-    if(email === this.email) {
+    if (email === this.email) {
       this.valid = false;
     }
 
@@ -64,6 +64,7 @@ UserSchema
 /**
  * Virtuals
  */
+
 // TODO: why do we save it?
 UserSchema
   .virtual('password')
@@ -79,7 +80,7 @@ UserSchema
 UserSchema
   .virtual('name.full')
   .get(function () {
-    return this.name.first + " " + this.name.last;
+    return this.name.first + ' ' + this.name.last;
   });
 
 // Public profile information
@@ -104,6 +105,7 @@ UserSchema
   .virtual('socialToken')
   .set(function (socialToken) {
     var self = this;
+
     self.providers = self.providers || {};
 
     jwt.verify(socialToken.token, config.secrets.session, function (err, decoded) {
@@ -134,7 +136,6 @@ UserSchema
 UserSchema
   .path('hashedPassword')
   .validate(function (hashedPassword) {
-
     // User with providers doesn't need a password
     if (this.providers &&
       ((this.providers.facebook && this.providers.facebook.id) ||
@@ -150,12 +151,20 @@ UserSchema
   .path('email')
   .validate(function (email, respond) {
     var self = this;
+
     this.constructor.findOne({email: email}, function (err, user) {
-      if (err) throw err;
+      if (err) {
+        throw err;
+      }
+
       if (user) {
-        if (self.id === user.id) return respond(true);
+        if (self.id === user.id) {
+          return respond(true);
+        }
+
         return respond(false);
       }
+
       respond(true);
     });
   }, 'האימייל הנוכחי נמצא כבר בשימוש.');
@@ -176,7 +185,9 @@ var validatePresenceOf = function (value) {
  */
 UserSchema
   .pre('save', function (next) {
-    if (!this.isNew) return next();
+    if (!this.isNew) {
+      return next();
+    }
 
     // User with providers doesn't need a password
     if (this.providers &&
@@ -185,10 +196,12 @@ UserSchema
       return next();
     }
 
-    if (!validatePresenceOf(this.hashedPassword))
+    if (!validatePresenceOf(this.hashedPassword)) {
       next(new Error('סיסמא שגוייה.'));
-    else
+    }
+    else {
       next();
+    }
   });
 
 /**
@@ -221,8 +234,12 @@ UserSchema.methods = {
    * @return {String}
    */
   encryptPassword: function (password) {
-    if (!password || !this.salt) return '';
+    if (!password || !this.salt) {
+      return '';
+    }
+
     var salt = new Buffer(this.salt, 'base64');
+
     return crypto.pbkdf2Sync(password, salt, 10000, 64).toString('base64');
   }
 };

@@ -44,6 +44,7 @@ exports.show = function (req, res) {
 // Creates a new role in the DB.
 exports.create = function (req, res) {
   var newRole = new Role(req.body);
+
   newRole.saveQ()
     .then(function (role) {
       if (!role) {
@@ -72,6 +73,7 @@ exports.update = function (req, res) {
       }
       else {
         role.set(data);
+
         return role.saveQ();
       }
     })
@@ -91,13 +93,15 @@ exports.destroy = function (req, res) {
     .then(function (role) {
       if (!role) {
         res.status(404).end();
-      } else {
+      }
+      else {
         res.status(204).end();
+
         return User.updateQ(
           {roles: role._id},
           {$pull: {roles: role._id}},
           {multi: true}
-        )
+        );
       }
     })
     .catch(function (err) {

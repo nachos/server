@@ -1,8 +1,8 @@
 'use strict';
 
 // Set up SSL
-var fs = require("fs"),
-  https = require("https");
+var fs = require('fs');
+var https = require('https');
 
 var credentials = {
   key: fs.readFileSync('server/config/certs/server.key'),

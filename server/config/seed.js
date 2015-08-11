@@ -10,7 +10,6 @@ var populateRoles = require('./seed-data/roles');
 var populatePackages = require('./seed-data/packages');
 
 module.exports = function () {
-
   populateRoles()
     .then(function (roles) {
       return populateUsers(roles);

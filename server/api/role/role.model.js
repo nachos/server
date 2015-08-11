@@ -15,10 +15,12 @@ var permissions = [
 
 var RoleSchema = new Schema({
   name: {type: String, required: true},
-  permissions: [{
+  permissions: [
+    {
       type: String,
       lowercase: true
-    }]
+    }
+  ]
 });
 
 /**
@@ -37,12 +39,20 @@ RoleSchema
   .path('name')
   .validate(function (name, respond) {
     var self = this;
+
     this.constructor.findOne({name: name}, function (err, role) {
-      if (err) throw err;
+      if (err) {
+        throw err;
+      }
+
       if (role) {
-        if (self.id === role.id) return respond(true);
+        if (self.id === role.id) {
+          return respond(true);
+        }
+
         return respond(false);
       }
+
       respond(true);
     });
   }, 'role name already used.');

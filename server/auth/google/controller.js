@@ -3,8 +3,6 @@
 var passport = require('passport');
 var User = require('../../api/user/user.model');
 var auth = require('../auth.service');
-var jwt = require('jsonwebtoken');
-var config = require('../../config/environment');
 
 exports.signin = function (req, res) {
   auth.setTokenCookie(req, res);

@@ -2,8 +2,6 @@
 
 var User = require('./user.model');
 var Role = require('../role/role.model');
-var config = require('../../config/environment');
-var jwt = require('jsonwebtoken');
 var logger = require('../../components/logger');
 var auth = require('../../auth/auth.service');
 var Q = require('q');
@@ -34,6 +32,7 @@ exports.index = function (req, res) {
  */
 exports.create = function (req, res) {
   var newUser = new User(req.body);
+
   newUser.saveQ()
     .then(function (user) {
       res.json({
@@ -75,7 +74,8 @@ exports.destroy = function (req, res) {
     .then(function (user) {
       if (!user) {
         res.status(404).end();
-      } else {
+      }
+      else {
         res.status(204).end();
       }
     })
@@ -97,8 +97,10 @@ exports.changePassword = function (req, res) {
     .then(function (user) {
       if (user.authenticate(oldPass)) {
         user.password = newPass;
+
         return user.saveQ();
-      } else {
+      }
+      else {
         res.status(403).end();
       }
     })
@@ -112,7 +114,6 @@ exports.changePassword = function (req, res) {
     });
 };
 
-
 // Updates an existing user in the DB.
 exports.update = function (req, res) {
   var data = _.pick(req.body, ['name', 'email', 'gender']);
@@ -124,6 +125,7 @@ exports.update = function (req, res) {
       }
       else {
         user.set(data);
+
         return user.saveQ();
       }
     })
@@ -161,6 +163,7 @@ exports.addRole = function (req, res) {
         }
         else {
           user.roles.push(role);
+
           return user.saveQ();
         }
       }
@@ -196,6 +199,7 @@ exports.removeRole = function (req, res) {
           });
 
           user.markModified('roles');
+
           return user.saveQ();
         }
       }

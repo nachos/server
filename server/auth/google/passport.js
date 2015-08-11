@@ -1,3 +1,5 @@
+'use strict';
+
 var passport = require('passport');
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 var User = require('../../api/user/user.model');
@@ -8,12 +10,12 @@ exports.setup = function (config) {
       clientID: config.google.clientID,
       clientSecret: config.google.clientSecret,
       scope: [
-        'https://www.googleapis.com/auth/userinfo.profile',
-        'https://www.googleapis.com/auth/userinfo.email',
+        'https://www.googleapis.com/auth/profile',
+        'https://www.googleapis.com/auth/email',
         'https://www.googleapis.com/auth/calendar'
       ]
     },
-    function(accessToken, refreshToken, profile, done) {
+    function (accessToken, refreshToken, profile, done) {
       var info = profile._json;
 
       User.findOneQ({ 'providers.google.id': profile.id})
@@ -58,5 +60,6 @@ exports.setup = function (config) {
           done(err);
         });
     }
+
   ));
 };

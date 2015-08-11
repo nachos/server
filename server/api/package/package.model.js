@@ -31,11 +31,16 @@ PackageSchema
   .path('name')
   .validate(function (name, respond) {
     var self = this;
+
     this.constructor.findOne({name: name}, function (err, pkg) {
-      if (err) throw err;
+      if (err) {
+        throw err;
+      }
+
       if (pkg) {
         return self.id === pkg.id ? respond(true) : respond(false);
       }
+
       respond(true);
     });
   }, 'name already taken.');

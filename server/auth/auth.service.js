@@ -14,21 +14,31 @@ var validateJwt = expressJwt({ secret: config.secrets.session });
  */
 function isAuthenticated() {
   return compose()
-    // Validate jwt
     .use(function (req, res, next) {
-      // allow access_token to be passed through query parameter as well
+      // Allow access_token to be passed through query parameter as well
       if (req.query && req.query.hasOwnProperty('access_token')) {
+        // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
+
         req.headers.authorization = 'Bearer ' + req.query.access_token;
+
+        // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
       }
+
       validateJwt(req, res, next);
     })
+
     // Attach user to request
     .use(function (req, res, next) {
       User.findById(req.user._id)
         .populate('roles')
         .exec(function (err, user) {
-          if (err) return next(err);
-          if (!user) return res.status(401).end();
+          if (err) {
+            return next(err);
+          }
+
+          if (!user) {
+            return res.status(401).end();
+          }
 
           req.user = user;
           next();
@@ -39,9 +49,10 @@ function isAuthenticated() {
 function fillAuthorizationHeaderFromCookie() {
   return function (req, res, next) {
     if (req.cookies && req.cookies.token) {
-      // allow access_token to be passed through the token cookie as well
+      // Allow access_token to be passed through the token cookie as well
       var accessToken = req.cookies.token;
-      accessToken = accessToken.substring(1, accessToken.length-1);
+
+      accessToken = accessToken.substring(1, accessToken.length - 1);
 
       req.headers.authorization = 'Bearer ' + accessToken;
     }
@@ -62,7 +73,7 @@ function hasPermissions() {
 
   return compose()
     .use(isAuthenticated())
-    .use(function meetsRequirements(req, res, next) {
+    .use(function (req, res, next) {
       var permissions = _.flatten(_.pluck(req.user.roles, 'permissions'));
 
       if (_.isEmpty(_.difference(wantedPermissions, permissions))) {
@@ -85,9 +96,12 @@ function signToken(id) {
  * Set token cookie directly for oAuth strategies
  */
 function setTokenCookie(req, res) {
-  if (!req.user) return res.status(404).json({message: 'something went wrong, try again'});
+  if (!req.user) {
+    return res.status(404).json({message: 'something went wrong, try again'});
+  }
 
   var token = signToken(req.user._id.toString());
+
   res.cookie('token', JSON.stringify(token));
   res.redirect('/');
 }

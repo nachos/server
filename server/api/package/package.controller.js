@@ -71,6 +71,7 @@ exports.update = function (req, res) {
       }
       else {
         pkg.set(data);
+
         return pkg.saveQ();
       }
     })
@@ -90,7 +91,8 @@ exports.destroy = function (req, res) {
     .then(function (pkg) {
       if (!pkg) {
         res.status(404).end();
-      } else {
+      }
+      else {
         res.status(204).end();
       }
     })

@@ -39,7 +39,7 @@ var all = {
 
   basicAuth: {
     enabled: false,
-    realm: "Nachos",
+    realm: 'Nachos',
     users: {
       'nacho': 'nacho'
     }
