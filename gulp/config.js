@@ -2,7 +2,7 @@
 
 module.exports = {
   paths: {
-    server: ['./server/**/*.js', '!./server/**/*.spec.js'],
+    server: ['server/**/*.js', '!server/**/*.spec.js'],
     test: './server/**/*.spec.js',
     gulp: ['./gulpfile.js', './gulp/**/*.js'],
     coverage: 'coverage/**/lcov.info',
