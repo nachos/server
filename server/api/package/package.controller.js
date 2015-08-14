@@ -3,6 +3,9 @@
 var _ = require('lodash');
 var Package = require('./package.model');
 var logger = require('../../components/logger');
+var sanitize = require('sanitize-filename');
+var path = require('path');
+var fs = require('fs');
 
 // Get list of packages
 exports.index = function (req, res) {
@@ -101,4 +104,18 @@ exports.destroy = function (req, res) {
 
       res.status(500).end();
     });
+};
+
+exports.tarball = function (req, res, next) {
+  var pkgName = sanitize(req.params.name);
+  var fileName = path.join('tarballs', pkgName + '.tgz');
+  var readStream = fs.createReadStream(fileName);
+
+  readStream.on('error', function (err) {
+    return next(err);
+  });
+
+  res.attachment(fileName);
+
+  readStream.pipe(res);
 };
