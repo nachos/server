@@ -106,7 +106,7 @@ exports.destroy = function (req, res) {
     });
 };
 
-exports.tarball = function (req, res, next) {
+exports.tarballDownload = function (req, res, next) {
   var pkgName = sanitize(req.params.name);
   var fileName = path.join('tarballs', pkgName + '.tgz');
   var readStream = fs.createReadStream(fileName);
@@ -118,4 +118,14 @@ exports.tarball = function (req, res, next) {
   res.attachment(fileName);
 
   readStream.pipe(res);
+};
+
+exports.tarballUpload = function (req, res) {
+  var pkgName = sanitize(req.params.name);
+  var fileName = path.join('tarballs', pkgName + '.tgz');
+
+  console.log(fileName);
+  console.log(Object.keys(req));
+
+  res.end();
 };
