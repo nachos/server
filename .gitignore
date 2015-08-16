@@ -2,4 +2,5 @@ node_modules
 .idea
 server/config/local.env.js
 errors.log
-/tarballs
+tarballs
+uploads

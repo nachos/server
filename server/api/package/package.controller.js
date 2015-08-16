@@ -125,7 +125,10 @@ exports.tarballUpload = function (req, res) {
   var fileName = path.join('tarballs', pkgName + '.tgz');
 
   console.log(fileName);
-  console.log(Object.keys(req));
+  console.log(req.file);
+
+  // TODO: create/update model
+  // TODO: validate file
 
   res.end();
 };
