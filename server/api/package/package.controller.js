@@ -125,9 +125,6 @@ exports.tarballUpload = function (req, res) {
   var pkgName = sanitize(req.params.name);
   var fileName = path.join('tarballs', pkgName + '.tgz');
 
-  console.log(fileName);
-  console.log(req.file);
-
   // TODO: create/update model
 
   var mainDir = path.join(path.dirname(require.main.filename), '..');
@@ -140,7 +137,11 @@ exports.tarballUpload = function (req, res) {
   }).on('readable', function () {
     fs.rename(tarball, path.join(mainDir, fileName), function (err) {
       if (err) {
-        console.log(err);
+        logger.error({err: err, req: req});
+
+        fs.unlink(tarball, function () {
+          res.status(500).send();
+        });
       }
 
       res.end();
