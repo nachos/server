@@ -6,6 +6,7 @@ var logger = require('../../components/logger');
 var sanitize = require('sanitize-filename');
 var path = require('path');
 var fs = require('fs');
+var tar = require('tar');
 
 // Get list of packages
 exports.index = function (req, res) {
@@ -128,15 +129,21 @@ exports.tarballUpload = function (req, res) {
   console.log(req.file);
 
   // TODO: create/update model
-  // TODO: validate file
 
   var mainDir = path.join(path.dirname(require.main.filename), '..');
+  var tarball = path.join(mainDir, req.file.path);
 
-  fs.rename(path.join(mainDir, req.file.path), path.join(mainDir, fileName), function (err) {
-    if (err) {
-      console.log(err);
-    }
+  fs.createReadStream(tarball).pipe(tar.Parse()).on('error', function () {
+    fs.unlink(tarball, function () {
+      res.status(400).send();
+    });
+  }).on('readable', function () {
+    fs.rename(tarball, path.join(mainDir, fileName), function (err) {
+      if (err) {
+        console.log(err);
+      }
 
-    res.end();
+      res.end();
+    });
   });
 };

@@ -69,6 +69,7 @@
     "passport-google-oauth": "^0.2.0",
     "passport-local": "^1.0.0",
     "q": "^1.4.1",
-    "sanitize-filename": "^1.4.2"
+    "sanitize-filename": "^1.4.2",
+    "tar": "^2.1.1"
   }
 }
