@@ -130,5 +130,13 @@ exports.tarballUpload = function (req, res) {
   // TODO: create/update model
   // TODO: validate file
 
-  res.end();
+  var mainDir = path.join(path.dirname(require.main.filename), '..');
+
+  fs.rename(path.join(mainDir, req.file.path), path.join(mainDir, fileName), function (err) {
+    if (err) {
+      console.log(err);
+    }
+
+    res.end();
+  });
 };
