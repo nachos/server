@@ -127,24 +127,25 @@ exports.tarballUpload = function (req, res) {
 
   // TODO: create/update model
 
-  var mainDir = path.join(path.dirname(require.main.filename), '..');
-  var tarball = path.join(mainDir, req.file.path);
+  var tarball = req.file.path;
 
-  fs.createReadStream(tarball).pipe(tar.Parse()).on('error', function () {
-    fs.unlink(tarball, function () {
-      res.status(400).send();
+  fs.createReadStream(tarball)
+    .pipe(tar.Parse())
+    .on('error', function () {
+      fs.unlink(tarball, function () {
+        res.status(400).send();
+      });
+    }).on('readable', function () {
+      fs.rename(tarball, fileName, function (err) {
+        if (err) {
+          logger.error({err: err, req: req});
+
+          fs.unlink(tarball, function () {
+            res.status(500).send();
+          });
+        }
+
+        res.end();
+      });
     });
-  }).on('readable', function () {
-    fs.rename(tarball, path.join(mainDir, fileName), function (err) {
-      if (err) {
-        logger.error({err: err, req: req});
-
-        fs.unlink(tarball, function () {
-          res.status(500).send();
-        });
-      }
-
-      res.end();
-    });
-  });
 };
