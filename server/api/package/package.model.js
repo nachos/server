@@ -20,10 +20,6 @@ var PackageSchema = new Schema({
   homepage: {type: String},
   owners: [{type: Schema.Types.ObjectId, ref: 'User'}],
   repository: {type: String},
-  dist: {
-    tarball: {type: String, required: true},
-    shasum: {type: String, required: true, lowercase: true}
-  },
   type: {type: String, required: true, enum: types}
 });
 

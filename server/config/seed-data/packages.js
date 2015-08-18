@@ -21,10 +21,6 @@ module.exports = function (users) {
           keywords: ['movie', 'list'],
           owners: users,
           repository: 'http://github.com/nachos/movie-list-dip',
-          dist: {
-            tarball: 'http://nach.os/lol.tgz',
-            shasum: '8416d24b5bbfa4963b075de867b049a284f34888'
-          },
           type: 'dip'
         },
         {
@@ -38,10 +34,6 @@ module.exports = function (users) {
           keywords: ['translation'],
           owners: users,
           repository: 'http://github.com/nachos/translation-dip',
-          dist: {
-            tarball: 'http://nach.os/lol.tgz',
-            shasum: '8416d24b5bbfa4963b075de867b049a284f34888'
-          },
           type: 'dip'
         },
         function (err) {
