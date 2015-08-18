@@ -17,11 +17,6 @@ module.exports = function () {
           'read_roles',
           'write_roles'
         ]
-      }, {
-        name: 'developer',
-        permissions: [
-          'write_packages'
-        ]
       }, function (err) {
         if (err) {
           deferred.reject(err);

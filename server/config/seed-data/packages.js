@@ -15,7 +15,7 @@ module.exports = function (users) {
           version: '0.1.0',
           time: {
             created: new Date(),
-            modified: new Date()
+            updated: new Date()
           },
           description: 'movie list dip',
           keywords: ['movie', 'list'],
@@ -28,7 +28,7 @@ module.exports = function (users) {
           version: '0.1.0',
           time: {
             created: new Date(),
-            modified: new Date()
+            updated: new Date()
           },
           description: 'translation dip',
           keywords: ['translation'],

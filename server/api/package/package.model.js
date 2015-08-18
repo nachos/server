@@ -5,6 +5,7 @@ var Schema = mongoose.Schema;
 
 var types = [
   'dip',
+  'burrito',
   'taco'
 ];
 
@@ -13,7 +14,7 @@ var PackageSchema = new Schema({
   version: {type: String, required: true, lowercase: true},
   time: {
     created: {type: Date, required: true},
-    modified: {type: Date, required: true}
+    updated: {type: Date, required: true}
   },
   description: {type: String},
   keywords: [{type: String, lowercase: true}],

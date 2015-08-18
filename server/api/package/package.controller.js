@@ -6,7 +6,9 @@ var logger = require('../../components/logger');
 var sanitize = require('sanitize-filename');
 var path = require('path');
 var fs = require('fs');
-var tar = require('tar');
+var tar = require('tar-stream');
+var zlib = require('zlib');
+var streamToJson = require('stream-to-json');
 
 // Get list of packages
 exports.index = function (req, res) {
@@ -35,26 +37,6 @@ exports.show = function (req, res) {
       }
       else {
         res.status(200).json(pkg);
-      }
-    })
-    .catch(function (err) {
-      logger.error({err: err, req: req});
-
-      res.status(500).end();
-    });
-};
-
-// Creates a new package in the DB.
-exports.create = function (req, res) {
-  var newPackage = new Package(req.body);
-
-  newPackage.saveQ()
-    .then(function (pkg) {
-      if (!pkg) {
-        res.status(500).end();
-      }
-      else {
-        res.status(201).json(pkg);
       }
     })
     .catch(function (err) {
@@ -122,30 +104,62 @@ exports.tarballDownload = function (req, res, next) {
 };
 
 exports.tarballUpload = function (req, res) {
-  var pkgName = sanitize(req.params.name);
-  var fileName = path.join('tarballs', pkgName + '.tgz');
+  // Svar pkgName = sanitize(req.params.name);
+  // Svar fileName = path.join('tarballs', pkgName + '.tgz');
 
   // TODO: create/update model
 
-  var tarball = req.file.path;
+  var uploadedFile = req.file.path;
+  var nachosJson;
 
-  fs.createReadStream(tarball)
-    .pipe(tar.Parse())
-    .on('error', function () {
-      fs.unlink(tarball, function () {
-        res.status(400).send();
-      });
-    }).on('readable', function () {
-      fs.rename(tarball, fileName, function (err) {
+  var extract = tar.extract();
+
+  extract.on('entry', function (header, stream, cb) {
+    stream.resume();
+
+    if (header.name === 'test/nachos.json') {
+      streamToJson(stream, function (err, json) {
         if (err) {
-          logger.error({err: err, req: req});
+          cb(err);
 
-          fs.unlink(tarball, function () {
-            res.status(500).send();
-          });
+          return res.status(400).send();
         }
 
-        res.end();
+        nachosJson = json;
+        cb();
       });
+    }
+    else {
+      stream.on('end', cb);
+    }
+  });
+
+  extract.on('finish', function () {
+    if (!nachosJson) {
+      return res.status(400).send();
+    }
+
+    fs.rename(uploadedFile, path.join('tarballs', nachosJson.name + '.tgz'), function (err) {
+      if (err) {
+        logger.error({err: err, req: req});
+
+        fs.unlink(uploadedFile, function () {
+          res.status(500).send();
+        });
+      }
+
+      res.status(200).send();
     });
+
+    return res.status(200).send();
+  });
+
+  fs.createReadStream(uploadedFile)
+    .pipe(zlib.Unzip())
+    .on('error', function () {
+      fs.unlink(uploadedFile, function () {
+        res.status(400).send();
+      });
+    })
+    .pipe(extract);
 };
