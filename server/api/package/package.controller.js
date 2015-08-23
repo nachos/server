@@ -2,13 +2,9 @@
 
 var _ = require('lodash');
 var Package = require('./package.model');
+var registry = require('./package.registry');
 var logger = require('../../components/logger');
 var sanitize = require('sanitize-filename');
-var path = require('path');
-var fs = require('fs');
-var tar = require('tar-stream');
-var zlib = require('zlib');
-var streamToJson = require('stream-to-json');
 
 // Get list of packages
 exports.index = function (req, res) {
@@ -91,75 +87,25 @@ exports.destroy = function (req, res) {
 
 exports.tarballDownload = function (req, res, next) {
   var pkgName = sanitize(req.params.name);
-  var fileName = path.join('tarballs', pkgName + '.tgz');
-  var readStream = fs.createReadStream(fileName);
+  var stream = registry.download(pkgName);
 
-  readStream.on('error', function (err) {
+  stream.on('error', function (err) {
     return next(err);
   });
 
-  res.attachment(fileName);
-
-  readStream.pipe(res);
+  res.attachment(pkgName + '.tgz');
+  stream.pipe(res);
 };
 
 exports.tarballUpload = function (req, res) {
-  // Svar pkgName = sanitize(req.params.name);
-  // Svar fileName = path.join('tarballs', pkgName + '.tgz');
-
-  // TODO: create/update model
-
+  var pkgName = sanitize(req.params.name);
   var uploadedFile = req.file.path;
-  var nachosJson;
 
-  var extract = tar.extract();
-
-  extract.on('entry', function (header, stream, cb) {
-    stream.resume();
-
-    if (header.name === 'test/nachos.json') {
-      streamToJson(stream, function (err, json) {
-        if (err) {
-          cb(err);
-
-          return res.status(400).send();
-        }
-
-        nachosJson = json;
-        cb();
-      });
-    }
-    else {
-      stream.on('end', cb);
-    }
-  });
-
-  extract.on('finish', function () {
-    if (!nachosJson) {
-      return res.status(400).send();
-    }
-
-    fs.rename(uploadedFile, path.join('tarballs', nachosJson.name + '.tgz'), function (err) {
-      if (err) {
-        logger.error({err: err, req: req});
-
-        fs.unlink(uploadedFile, function () {
-          res.status(500).send();
-        });
-      }
-
+  registry.upload(uploadedFile, pkgName)
+    .then(function () {
       res.status(200).send();
-    });
-
-    return res.status(200).send();
-  });
-
-  fs.createReadStream(uploadedFile)
-    .pipe(zlib.Unzip())
-    .on('error', function () {
-      fs.unlink(uploadedFile, function () {
-        res.status(400).send();
-      });
     })
-    .pipe(extract);
+    .catch(function (err) {
+      res.status(500).send(err);
+    });
 };
