@@ -76,12 +76,11 @@ function hasPermissions() {
     .use(function (req, res, next) {
       var permissions = _.flatten(_.pluck(req.user.roles, 'permissions'));
 
-      if (_.isEmpty(_.difference(wantedPermissions, permissions))) {
-        next();
+      if (!_.isEmpty(_.difference(wantedPermissions, permissions))) {
+        return res.status(403).end();
       }
-      else {
-        res.status(403).end();
-      }
+
+      next();
     });
 }
 

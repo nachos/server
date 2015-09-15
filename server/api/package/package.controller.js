@@ -6,8 +6,10 @@ var registry = require('./package.registry');
 var logger = require('../../components/logger');
 var sanitize = require('sanitize-filename');
 
+var controller = {};
+
 // Get list of packages
-exports.index = function (req, res) {
+controller.index = function (req, res) {
   Package.findQ({})
     .then(function (packages) {
       if (!packages) {
@@ -25,7 +27,7 @@ exports.index = function (req, res) {
 };
 
 // Get a single package
-exports.show = function (req, res) {
+controller.show = function (req, res) {
   Package.findOneQ({name: req.params.name})
     .then(function (pkg) {
       if (!pkg) {
@@ -43,7 +45,7 @@ exports.show = function (req, res) {
 };
 
 // Updates an existing package in the DB.
-exports.update = function (req, res) {
+controller.update = function (req, res) {
   var data = _.pick(req.body, ['name', 'repo']);
 
   Package.findOneQ({name: req.params.name})
@@ -68,7 +70,7 @@ exports.update = function (req, res) {
 };
 
 // Deletes a package from the DB.
-exports.destroy = function (req, res) {
+controller.destroy = function (req, res) {
   Package.findOneAndRemoveQ({name: req.params.name})
     .then(function (pkg) {
       if (!pkg) {
@@ -85,7 +87,7 @@ exports.destroy = function (req, res) {
     });
 };
 
-exports.tarballDownload = function (req, res, next) {
+controller.tarballDownload = function (req, res, next) {
   var pkgName = sanitize(req.params.name);
   var stream = registry.download(pkgName);
 
@@ -97,15 +99,26 @@ exports.tarballDownload = function (req, res, next) {
   stream.pipe(res);
 };
 
-exports.tarballUpload = function (req, res) {
+controller.tarballUpload = function (req, res) {
   var pkgName = sanitize(req.params.name);
-  var uploadedFile = req.file.path;
 
-  registry.upload(uploadedFile, pkgName)
-    .then(function () {
-      res.status(200).send();
-    })
-    .catch(function (err) {
-      res.status(500).send(err);
+  Package.findOneQ({name: pkgName})
+    .then(function (pkg) {
+      if (pkg && !_.some(pkg.owners, req.user._id)) {
+        res.status(403).send('permission denied');
+      }
+      else {
+        var uploadedFile = req.file.path;
+
+        registry.upload(uploadedFile, pkgName)
+          .then(function () {
+            res.status(200).send();
+          })
+          .catch(function (err) {
+            res.status(500).send(err);
+          });
+      }
     });
 };
+
+module.exports = controller;

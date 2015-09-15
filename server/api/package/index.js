@@ -13,7 +13,7 @@ router.get('/:name', controller.show);
 router.put('/:name', auth.hasPermissions('write_packages'), controller.update);
 router.delete('/:name', auth.hasPermissions('write_packages'), controller.destroy);
 router.get('/:name/tarball', controller.tarballDownload);
-router.post('/:name/tarball', upload.single('package'), controller.tarballUpload);
-router.put('/:name/tarball', upload.single('package'), controller.tarballUpload);
+router.post('/:name/tarball', auth.hasPermissions('write_packages'), upload.single('package'), controller.tarballUpload);
+router.put('/:name/tarball', auth.hasPermissions('write_packages'), upload.single('package'), controller.tarballUpload);
 
 module.exports = router;
