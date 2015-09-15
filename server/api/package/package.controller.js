@@ -105,19 +105,20 @@ controller.tarballUpload = function (req, res) {
   Package.findOneQ({name: pkgName})
     .then(function (pkg) {
       if (pkg && !_.some(pkg.owners, req.user._id)) {
-        res.status(403).send('permission denied');
+        return res.status(403).send();
       }
-      else {
-        var uploadedFile = req.file.path;
 
-        registry.upload(uploadedFile, pkgName)
-          .then(function () {
-            res.status(200).send();
-          })
-          .catch(function (err) {
-            res.status(500).send(err);
-          });
-      }
+      var uploadedFile = req.file.path;
+
+      registry.upload(uploadedFile, pkgName)
+        .then(function () {
+          res.status(200).send();
+        })
+        .catch(function (err) {
+          logger.error({err: err, req: req});
+
+          res.status(500).end();
+        });
     });
 };
 
