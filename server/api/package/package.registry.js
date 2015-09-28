@@ -67,12 +67,12 @@ exports.upload = function (file, pkgName) {
         return deferred.reject('conflict in package name');
       }
 
-      Q.nfcall(mkdirp, 'tarballs')
+      return Q.nfcall(mkdirp, 'tarballs')
         .then(function () {
-          return Q.nfcall(fs.rename, file, fileName)
-            .then(function () {
-              return deferred.resolve();
-            });
+          return Q.nfcall(fs.rename, file, fileName);
+        })
+        .then(function () {
+          return deferred.resolve(nachosJson);
         })
         .catch(function () {
           return fs.unlink(file, function () {
