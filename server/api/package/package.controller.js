@@ -111,6 +111,21 @@ controller.tarballUpload = function (req, res) {
       var uploadedFile = req.file.path;
 
       registry.upload(uploadedFile, pkgName)
+        .then(function (nachosJson) {
+          pkg = pkg || {
+              name: pkgName,
+              owners: [req.user._id],
+              time: {
+                created: new Date()
+              }
+            };
+
+          // TODO: Validate
+          pkg = _.merge(pkg, nachosJson);
+          pkg.time.updated = new Date();
+
+          return Package.updateQ({name: pkgName}, pkg, {upsert: true});
+        })
         .then(function () {
           res.status(200).send();
         })
