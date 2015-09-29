@@ -1,6 +1,6 @@
 'use strict';
 
-var Q = require('Q');
+var Q = require('q');
 var streamToJson = require('stream-to-json');
 var path = require('path');
 var fs = require('fs');

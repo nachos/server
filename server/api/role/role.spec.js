@@ -36,7 +36,7 @@ var createModels = function () {
     });
 };
 
-xdescribe('/api/roles', function () {
+describe('/api/roles', function () {
   var user;
   var role;
 
@@ -329,7 +329,7 @@ xdescribe('/api/roles', function () {
     });
   });
 
-  xdescribe('PUT /api/roles/:id', function () {
+  describe('PUT /api/roles/:id', function () {
     it('should respond with JSON array', function (done) {
       request(app)
         .get('/api/roles')
@@ -345,7 +345,7 @@ xdescribe('/api/roles', function () {
         });
     });
   });
-  xdescribe('DELETE /api/roles/:id', function () {
+  describe('DELETE /api/roles/:id', function () {
     it('should respond with JSON array', function (done) {
       request(app)
         .get('/api/roles')

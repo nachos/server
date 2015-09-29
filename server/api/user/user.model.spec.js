@@ -10,7 +10,7 @@ var user = new User({
   password: 'password'
 });
 
-xdescribe('User Model', function () {
+describe('User Model', function () {
   before(function (done) {
     // Clear users before testing
     User.remove()
