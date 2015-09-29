@@ -86,7 +86,7 @@ UserSchema
   .virtual('profile')
   .get(function () {
     return {
-      'name': this.name
+      name: this.name
     };
   });
 
@@ -95,7 +95,7 @@ UserSchema
   .virtual('token')
   .get(function () {
     return {
-      '_id': this._id
+      _id: this._id
     };
   });
 

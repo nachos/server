@@ -41,7 +41,7 @@ var all = {
     enabled: false,
     realm: 'Nachos',
     users: {
-      'nacho': 'nacho'
+      nacho: 'nacho'
     }
   }
 };
