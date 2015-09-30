@@ -11,13 +11,13 @@ exports.signin = function (req, res) {
 exports.connect = function (req, res, next) {
   // TODO: already connected ?
 
-  passport.authenticate('facebook', { callbackURL: '/auth/facebook/connect/callback' }, function (err, user, info) {
+  passport.authenticate('facebook', {callbackURL: '/auth/facebook/connect/callback'}, function (err, user, info) {
     if (err || !info) {
       // TODO: what?
       return res.redirect('/');
     }
 
-    User.findOne({ 'providers.facebook.id': info.id }, function (err, user) {
+    User.findOne({'providers.facebook.id': info.id}, function (err, user) {
       if (err) {
         // TODO: what?
         return next(err);
@@ -29,7 +29,12 @@ exports.connect = function (req, res, next) {
       }
       else {
         // TODO: req user undefined?
-        User.update({_id: req.user._id}, { 'providers.facebook': { id: info.id, link: info.link }}, { multi: false }, function (err) {
+        User.update({_id: req.user._id}, {
+          'providers.facebook': {
+            id: info.id,
+            link: info.link
+          }
+        }, {multi: false}, function (err) {
           if (err) {
             // TODO: what?
             return next(err);
@@ -43,7 +48,7 @@ exports.connect = function (req, res, next) {
 };
 
 exports.disconnect = function (req, res, next) {
-  User.update({_id: req.user._id}, { $unset: {'providers.facebook': true}}, { multi: false }, function (err) {
+  User.update({_id: req.user._id}, {$unset: {'providers.facebook': true}}, {multi: false}, function (err) {
     if (err) {
       // TODO: what?
       return next(err);

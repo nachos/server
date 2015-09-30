@@ -20,7 +20,10 @@ controller.index = function (req, res) {
       }
     })
     .catch(function (err) {
-      logger.error({err: err, req: req});
+      logger.error({
+        err: err,
+        req: req
+      });
 
       res.status(500).end();
     });
@@ -38,7 +41,10 @@ controller.show = function (req, res) {
       }
     })
     .catch(function (err) {
-      logger.error({err: err, req: req});
+      logger.error({
+        err: err,
+        req: req
+      });
 
       res.status(500).end();
     });
@@ -63,7 +69,10 @@ controller.update = function (req, res) {
       res.status(200).end();
     })
     .catch(function (err) {
-      logger.error({err: err, req: req});
+      logger.error({
+        err: err,
+        req: req
+      });
 
       res.status(500).end();
     });
@@ -81,7 +90,10 @@ controller.destroy = function (req, res) {
       }
     })
     .catch(function (err) {
-      logger.error({err: err, req: req});
+      logger.error({
+        err: err,
+        req: req
+      });
 
       res.status(500).end();
     });
@@ -130,7 +142,10 @@ controller.tarballUpload = function (req, res) {
           res.status(200).send();
         })
         .catch(function (err) {
-          logger.error({err: err, req: req});
+          logger.error({
+            err: err,
+            req: req
+          });
 
           res.status(500).end();
         });

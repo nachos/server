@@ -22,9 +22,15 @@ var UserSchema = new Schema({
     type: String,
     lowercase: true
   },
-  gender: {type: String, lowercase: true},
+  gender: {
+    type: String,
+    lowercase: true
+  },
   roles: [
-    {type: Schema.Types.ObjectId, ref: 'Role'}
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Role'
+    }
   ],
   hashedPassword: {
     type: String,
@@ -45,19 +51,6 @@ var UserSchema = new Schema({
     }
   }
 });
-
-/**
- * Custom Setters
- */
-UserSchema
-  .path('email')
-  .set(function (email) {
-    if (email === this.email) {
-      this.valid = false;
-    }
-
-    return email;
-  });
 
 /**
  * Virtuals
@@ -190,7 +183,7 @@ UserSchema
     // User with providers doesn't need a password
     if (this.providers &&
       ((this.providers.facebook && this.providers.facebook.id) ||
-        (this.providers.google && this.providers.google.id))) {
+      (this.providers.google && this.providers.google.id))) {
       return next();
     }
 
@@ -209,7 +202,7 @@ UserSchema.methods = {
   /**
    * Authenticate - check if the passwords are the same
    *
-   * @param {String} plainText
+   * @param {String} plainText The password
    * @return {Boolean}
    */
   authenticate: function (plainText) {
@@ -228,7 +221,7 @@ UserSchema.methods = {
   /**
    * Encrypt password
    *
-   * @param {String} password
+   * @param {String} password The password
    * @return {String}
    */
   encryptPassword: function (password) {

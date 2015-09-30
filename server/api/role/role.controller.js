@@ -17,7 +17,10 @@ exports.index = function (req, res) {
       }
     })
     .catch(function (err) {
-      logger.error({err: err, req: req});
+      logger.error({
+        err: err,
+        req: req
+      });
 
       res.status(500).end();
     });
@@ -35,7 +38,10 @@ exports.show = function (req, res) {
       }
     })
     .catch(function (err) {
-      logger.error({err: err, req: req});
+      logger.error({
+        err: err,
+        req: req
+      });
 
       res.status(500).end();
     });
@@ -55,7 +61,10 @@ exports.create = function (req, res) {
       }
     })
     .catch(function (err) {
-      logger.error({err: err, req: req});
+      logger.error({
+        err: err,
+        req: req
+      });
 
       res.status(500).end();
     });
@@ -81,7 +90,10 @@ exports.update = function (req, res) {
       res.status(200).end();
     })
     .catch(function (err) {
-      logger.error({err: err, req: req});
+      logger.error({
+        err: err,
+        req: req
+      });
 
       res.status(500).end();
     });
@@ -105,7 +117,10 @@ exports.destroy = function (req, res) {
       }
     })
     .catch(function (err) {
-      logger.error({err: err, req: req});
+      logger.error({
+        err: err,
+        req: req
+      });
 
       res.status(500).end();
     });

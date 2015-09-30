@@ -16,7 +16,10 @@ var clearModels = function () {
 };
 
 var createModels = function () {
-  return Role.createQ({name: 'admin', permissions: []})
+  return Role.createQ({
+    name: 'admin',
+    permissions: []
+  })
     .then(function (newRole) {
       return User.create({
         name: {
@@ -311,7 +314,10 @@ describe('/api/roles', function () {
               request(app)
                 .post('/api/roles')
                 .set('Authorization', 'Bearer ' + auth.signToken(user._id))
-                .send({name: 'god', permissions: []})
+                .send({
+                  name: 'god',
+                  permissions: []
+                })
                 .expect(403)
                 .end(function (err, res) {
                   if (err) {

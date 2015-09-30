@@ -10,18 +10,46 @@ var types = [
 ];
 
 var PackageSchema = new Schema({
-  name: {type: String, required: true, lowercase: true},
-  version: {type: String, required: true, lowercase: true},
+  name: {
+    type: String,
+    required: true,
+    lowercase: true
+  },
+  version: {
+    type: String,
+    required: true,
+    lowercase: true
+  },
   time: {
-    created: {type: Date, required: true},
-    updated: {type: Date, required: true}
+    created: {
+      type: Date,
+      required: true
+    },
+    updated: {
+      type: Date,
+      required: true
+    }
   },
   description: {type: String},
-  keywords: [{type: String, lowercase: true}],
+  keywords: [
+    {
+      type: String,
+      lowercase: true
+    }
+  ],
   homepage: {type: String},
-  owners: [{type: Schema.Types.ObjectId, ref: 'User'}],
+  owners: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'User'
+    }
+  ],
   repository: {type: String},
-  type: {type: String, required: true, enum: types}
+  type: {
+    type: String,
+    required: true,
+    enum: types
+  }
 });
 
 /**

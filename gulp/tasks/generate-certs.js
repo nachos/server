@@ -8,7 +8,10 @@ var _ = require('lodash');
 
 module.exports = function (gulp) {
   gulp.task('generate-certs', function (cb) {
-    pem.createCertificate({days: 3650, selfSigned: true}, function (err, keys) {
+    pem.createCertificate({
+      days: 3650,
+      selfSigned: true
+    }, function (err, keys) {
       if (err) {
         return cb(err);
       }
