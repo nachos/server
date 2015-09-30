@@ -39,7 +39,7 @@ var createModels = function () {
     });
 };
 
-describe('/api/roles', function () {
+xdescribe('/api/roles', function () {
   var user;
   var role;
 

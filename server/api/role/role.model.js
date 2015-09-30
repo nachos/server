@@ -67,6 +67,6 @@ RoleSchema
     return v.every(function (val) {
       return _.contains(permissions, val);
     });
-  }, 'הרשאה אחת או יותר לא היו חוקיות.');
+  }, 'one or more invalid permissions.');
 
 module.exports = mongoose.model('Role', RoleSchema);
