@@ -101,7 +101,7 @@ controller.destroy = function (req, res) {
 
 controller.tarballDownload = function (req, res, next) {
   var pkgName = sanitize(req.params.name);
-  var stream = registry.download(pkgName);
+  var stream = registry.download(pkgName, req.params.os, req.params.arch);
 
   stream.on('error', function (err) {
     return next(err);
@@ -122,7 +122,7 @@ controller.tarballUpload = function (req, res) {
 
       var uploadedFile = req.file.path;
 
-      registry.upload(uploadedFile, pkgName)
+      registry.upload(uploadedFile, pkgName, req.params.os, req.params.arch)
         .then(function (nachosJson) {
           pkg = pkg || {
               name: pkgName,

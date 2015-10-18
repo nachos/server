@@ -8,8 +8,8 @@ var tar = require('tar-stream');
 var zlib = require('zlib');
 var mkdirp = require('mkdirp');
 
-var getPkgTgz = function (pkgName) {
-  return path.join('tarballs', pkgName + '.tgz');
+var getPkgTgz = function (pkgName, os, arch) {
+  return path.join('tarballs', [pkgName, os, arch].join('-') + '.tgz');
 };
 
 var findJson = function (file, callback) {
@@ -47,9 +47,9 @@ var findJson = function (file, callback) {
   return extract;
 };
 
-exports.upload = function (file, pkgName) {
+exports.upload = function (file, pkgName, os, arch) {
   var deferred = Q.defer();
-  var fileName = getPkgTgz(pkgName);
+  var fileName = getPkgTgz(pkgName, os, arch);
 
   fs.createReadStream(file)
     .pipe(zlib.Unzip())
@@ -67,7 +67,7 @@ exports.upload = function (file, pkgName) {
         return deferred.reject('conflict in package name');
       }
 
-      return Q.nfcall(mkdirp, 'tarballs')
+      return Q.nfcall(mkdirp, path.dirname(fileName))
         .then(function () {
           return Q.nfcall(fs.rename, file, fileName);
         })
@@ -84,8 +84,8 @@ exports.upload = function (file, pkgName) {
   return deferred.promise;
 };
 
-exports.download = function (pkgName) {
-  var fileName = getPkgTgz(pkgName);
+exports.download = function (pkgName, os, arch) {
+  var fileName = getPkgTgz(pkgName, os, arch);
 
   return fs.createReadStream(fileName);
 };
